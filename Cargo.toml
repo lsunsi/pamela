@@ -1,0 +1,8 @@
+[package]
+name = "pamela"
+version = "0.1.0"
+authors = ["lsunsi <sunsi.lucas@gmail.com>"]
+
+[dependencies]
+binance = { git = "https://github.com/lsunsi/binance-rs.git" }
+error-chain = "0.11.0"
