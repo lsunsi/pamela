@@ -1,28 +1,10 @@
-use binance::account::Account;
-use binance::market::Market;
 use trades::trades;
-use allocation;
-use balances;
+use binance::account::Account;
 use execute;
-use prices;
 
 #[derive(Debug)]
 pub enum Error {
-    BalancesError(balances::Error),
-    PricesError(prices::Error),
     ExecuteError(String),
-}
-
-impl From<balances::Error> for Error {
-    fn from(err: balances::Error) -> Error {
-        Error::BalancesError(err)
-    }
-}
-
-impl From<prices::Error> for Error {
-    fn from(err: prices::Error) -> Error {
-        Error::PricesError(err)
-    }
 }
 
 impl From<String> for Error {
@@ -32,20 +14,15 @@ impl From<String> for Error {
 }
 
 pub fn rebalance(
-    market: &Market,
     account: &Account,
+    prices: &[f64],
+    allocation: &[f64],
+    total: &f64,
     coins: &[&str],
     target: &[f64],
     margin: f64,
 ) -> Result<Vec<(String, f64)>, Error> {
-    let base = coins[0];
-
-    let balances = balances::balances(account, coins)?;
-    let prices = prices::prices(market, coins, base)?;
-    let (total, allocation) = allocation::allocation(&balances, &prices);
-
-    let trades = trades(total * (1. - margin), &prices, &allocation, target, coins);
-    // execute(&account, &base, &trades)?;
-
+    let trades = trades(total * (1. - margin), prices, allocation, target, coins);
+    //execute(&account, coins[0], &trades)?;
     Ok(trades)
 }
