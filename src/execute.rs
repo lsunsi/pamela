@@ -7,14 +7,15 @@ fn truncate(number: f64, precision: i32) -> f64 {
 
 pub fn execute(account: &Account, base: &str, trades: &[(String, f64)]) -> Result<(), String> {
     for &(ref coin, raw_amount) in trades {
-        let amount = truncate(raw_amount, 8);
+        let amount = truncate(raw_amount, 0);
         let m = format!("{}{}", coin, base);
 
         let result = if amount > 0. {
-            account.market_buy(m, amount)
+            account.test_market_buy(m, amount)
         } else {
-            account.market_sell(m, -amount)
+            account.test_market_sell(m, -amount)
         };
+        println!("{:?}", result);
 
         if let Err(err) = result {
             return Err(err.description().into());
