@@ -5,5 +5,4 @@ authors = ["lsunsi <sunsi.lucas@gmail.com>"]
 
 [dependencies]
 binance = { git = "https://github.com/luizParreira/binance-rs.git" }
-tungstenite = "0.5.0"
 error-chain = "0.11.0"
